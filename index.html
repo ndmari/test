@@ -40,14 +40,34 @@ h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
 .donut:after{content:"";position:absolute;inset:24%;background:white;border-radius:50%}
 .chart-center{position:absolute;z-index:1;text-align:center;display:grid;place-items:center;line-height:1.35}.chart-center strong{font-size:2rem;color:var(--navy)}
 .legend{display:grid;gap:10px}.legend-row{display:grid;grid-template-columns:12px 1fr auto;gap:9px;align-items:center;font-size:.95rem}.swatch{width:12px;height:12px;border-radius:3px}.legend-row strong{font-variant-numeric:tabular-nums}
-.winner{background:var(--pale);border-radius:16px;padding:20px;margin-top:20px}
-.rankcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
-.rankcard{border:1px solid var(--line);border-radius:14px;padding:15px}.ranklabel{font-size:.76rem;color:var(--muted);font-weight:700}
 .type-list{display:grid;gap:14px;margin-top:22px}.type-card{border:1px solid var(--line);border-radius:16px;padding:20px}.type-head{display:flex;justify-content:space-between;gap:12px;align-items:start}.type-name{display:flex;gap:10px;align-items:center}.type-dot{width:13px;height:13px;border-radius:4px;flex-shrink:0}.percent{font-size:1.2rem;font-weight:800;white-space:nowrap}
 .type-card p{margin:8px 0}.type-card ul{margin:7px 0 12px;padding-left:1.2em}.type-card li{margin:3px 0}.tip{background:#f4f7f9;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 10px 10px 0;margin-top:12px}
 .result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.result-actions .btn{flex:1;min-width:160px}
+
+.combo{position:relative;overflow:hidden;border-radius:22px;padding:clamp(24px,6vw,44px);margin:22px 0 8px;color:#fff;background:linear-gradient(135deg,var(--c1),var(--c2))}
+.combo:after{content:"";position:absolute;width:240px;height:240px;border:1px solid #ffffff30;border-radius:50%;right:-70px;top:-80px;box-shadow:0 0 0 26px #ffffff0d,0 0 0 54px #ffffff08}
+.combo>*{position:relative;z-index:1}
+.combo-eyebrow{font-size:.78rem;letter-spacing:.15em;font-weight:800;opacity:.9}
+.combo-no{display:inline-block;margin-top:14px;background:#ffffff26;border:1px solid #ffffff50;border-radius:99px;padding:3px 12px;font-size:.82rem;font-weight:700}
+.combo-name{font-size:clamp(1.9rem,6.5vw,3rem);line-height:1.3;margin:12px 0 10px;letter-spacing:.02em}
+.combo-pair{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-weight:700;margin-bottom:16px}
+.combo-pair span.t{background:#fff;color:var(--navy);border-radius:99px;padding:4px 13px;font-size:.92rem}
+.combo-pair span.x{font-size:1.1rem;opacity:.9}
+.combo-desc{font-size:1.03rem;margin:0 0 16px;max-width:680px}
+.combo-strength{background:#00000026;border-radius:12px;padding:12px 15px;font-size:.95rem}
+.combo-strength strong{display:block;font-size:.78rem;letter-spacing:.1em;opacity:.85;margin-bottom:2px}
+.chart-section{margin-top:26px}
+.chart-section h3{font-size:1.15rem}
+.advice{margin-top:30px;border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.advice-head{padding:20px 22px;background:var(--pale);border-bottom:1px solid var(--line)}
+.advice-head h2{margin:6px 0 4px}
+.advice-body{padding:20px 22px}
+.advice-body h3{margin-top:18px}.advice-body h3:first-child{margin-top:0}
+.advice-body ul{margin:7px 0;padding-left:1.2em}.advice-body li{margin:3px 0}
+.advice-q{background:#f4f7f9;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 10px 10px 0;margin-top:8px;font-weight:600}
+.tie-note{font-size:.88rem;color:var(--muted);margin-top:14px}
 .footer{text-align:center;color:#87939d;font-size:.78rem;padding:22px 8px}
-@media(max-width:640px){.result-top{grid-template-columns:1fr;gap:12px}.chart-wrap{min-height:220px}.donut{width:220px}.rankcards{grid-template-columns:1fr}.panel{border-radius:17px}.type-card{padding:16px}.quiznav{flex-wrap:wrap}}
+@media(max-width:640px){.result-top{grid-template-columns:1fr;gap:12px}.chart-wrap{min-height:220px}.donut{width:220px}.panel{border-radius:17px}.type-card{padding:16px}.quiznav{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -88,18 +108,18 @@ h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
     <div class="eyebrow" style="color:#9b7b43">Your Result</div>
     <h2>あなたの営業スタイル分析</h2>
     <p class="muted">回答した15問の選択傾向を集計しています。割合は営業能力の高さを示すものではありません。</p>
-    <div class="result-top">
-      <div class="chart-wrap">
-        <div id="donut" class="donut" role="img" aria-label="5タイプの回答割合を示す円グラフ"></div>
-        <div class="chart-center"><span class="muted" style="font-size:.8rem">回答数</span><strong>15</strong><span class="muted" style="font-size:.8rem">TOTAL</span></div>
+    <div class="combo" id="combo"></div>
+    <div class="chart-section">
+      <h3>5タイプの割合</h3>
+      <div class="result-top">
+        <div class="chart-wrap">
+          <div id="donut" class="donut" role="img" aria-label="5タイプの回答割合を示す円グラフ"></div>
+          <div class="chart-center"><span class="muted" style="font-size:.8rem">回答数</span><strong>15</strong><span class="muted" style="font-size:.8rem">TOTAL</span></div>
+        </div>
+        <div id="legend" class="legend"></div>
       </div>
-      <div id="legend" class="legend"></div>
     </div>
-    <div class="winner" id="winner"></div>
-    <div class="rankcards" id="rankcards"></div>
-    <h2 style="margin-top:30px">5タイプの特徴と接客の糸口</h2>
-    <p class="muted">自分の上位タイプだけでなく、意識して使いたい別タイプの視点も確認してみましょう。</p>
-    <div class="type-list" id="typeList"></div>
+    <div class="advice" id="advice"></div>
     <div class="result-actions">
       <button id="copyBtn" class="btn primary">結果をコピー</button>
       <button id="restartBtn" class="btn secondary">もう一度診断する</button>
@@ -136,6 +156,28 @@ const types = {
    strengths:["見積もりや料金条件を説明する","準備スケジュールや段取りを案内する","ご家族の懸念や不安要素を解消する"],
    opening:"会場を決めるにあたって、今のうちに確認しておきたいことや、不安に感じていることはありますか？",
    caution:"注意事項だけで終わらず、安心材料と実現できる楽しみの両方を伝えましょう。"}
+};
+const combos = {
+ AB:{no:1,name:"心を読み解くプロファイラー",desc:"相手の表情や言葉の変化を捉え、会話を通じて本音を引き出すタイプ。親しみやすさと観察力を併せ持ち、お客様自身も気づいていない希望を見つけるのが得意。",strength:"潜在ニーズの発見、自然なヒアリング"},
+ AC:{no:2,name:"真実を導く戦略家",desc:"情報を集め、課題を整理し、成約に向けた道筋を組み立てるタイプ。お客様の希望と現実的な条件を照らし合わせ、納得感のある判断を支える。",strength:"課題整理、比較検討への対応、論理的な提案"},
+ AD:{no:3,name:"可能性を発掘する発明家",desc:"お客様の言葉の裏にある価値観を分析し、思いもよらない結婚式のアイデアへつなげるタイプ。観察から発想を生み出すことに長けている。",strength:"潜在ニーズを起点にした独自提案"},
+ AE:{no:4,name:"見逃さない品質鑑定士",desc:"小さな違和感や見落としやすい条件にも気づき、丁寧に確認するタイプ。お客様の不安の原因を突き止め、安心して決断できる状態をつくる。",strength:"不安の特定、リスク説明、細やかな確認"},
+ BA:{no:5,name:"心の扉を開く聞き上手",desc:"相手が話しやすい空気をつくりながら、会話の中から本音や大切にしていることを見つけるタイプ。楽しい雑談を深いヒアリングへとつなげられる。",strength:"信頼関係づくり、本音を引き出す対話"},
+ BC:{no:6,name:"みんなを前へ進めるファシリテーター",desc:"お客様の気持ちを尊重しながら、話し合いを整理して結論へ導くタイプ。新郎新婦の意見が違うときも、双方が納得できる着地点を探る。",strength:"意見調整、会話の進行、決断の後押し"},
+ BD:{no:7,name:"ワクワクを生み出すエンターテイナー",desc:"会話を盛り上げながら、結婚式への期待を膨らませるタイプ。お客様の反応を見てアイデアを広げ、「こんなことができたら楽しそう」という気持ちを引き出す。",strength:"期待感の醸成、演出提案、楽しい接客体験"},
+ BE:{no:8,name:"安心を届けるホスピタリティリーダー",desc:"親しみやすさに加え、細やかな気配りでお客様の緊張をほぐすタイプ。初めての式場見学でも、気軽に質問や相談ができる雰囲気をつくる。",strength:"安心感の提供、相談しやすい関係づくり"},
+ CA:{no:9,name:"本質を見極めるコンサルタント",desc:"情報を整理するだけでなく、質問によって問題の核心を見極めるタイプ。お客様が迷っている理由を明らかにし、判断の軸を一緒につくる。",strength:"検討理由の分析、比較軸の明確化"},
+ CB:{no:10,name:"納得をつくるパートナー",desc:"論理的な説明と温かなコミュニケーションを両立するタイプ。情報を押しつけるのではなく、お客様の気持ちに寄り添いながら決断を支える。",strength:"わかりやすい説明、納得感のあるクロージング"},
+ CD:{no:11,name:"理想を形にするプランナー",desc:"お客様の理想を具体的なプランへ落とし込むタイプ。夢や希望を現実的な段取りと組み合わせ、実現までの道筋をわかりやすく示す。",strength:"具体的な提案、予算と希望の両立"},
+ CE:{no:12,name:"迷いを解消する意思決定の専門家",desc:"選択肢を整理し、費用や条件を明確にしながら判断を助けるタイプ。安心材料をそろえることで、お客様が自信を持って決断できるようにする。",strength:"見積もり説明、比較検討、決断への支援"},
+ DA:{no:13,name:"隠れた魅力を発見するアイデアハンター",desc:"観察と想像を組み合わせ、お客様もまだ言葉にできていない理想を見つけるタイプ。ありふれた希望から、その人たちらしい結婚式の可能性を探る。",strength:"個性の発見、独自性のある提案"},
+ DB:{no:14,name:"感動を演出するストーリーテラー",desc:"アイデアを魅力的な言葉やエピソードで伝え、お客様の心を動かすタイプ。結婚式当日の情景を想像させ、期待や感情を引き出すことが得意。",strength:"当日のイメージ喚起、感情に響くプレゼン"},
+ DC:{no:15,name:"アイデアを実現するプロデューサー",desc:"自由な発想を、実行できる具体的な提案へ変えるタイプ。魅力的なアイデアを出すだけでなく、必要な準備や予算、実現方法まで考えられる。",strength:"演出やコーディネートの提案、実現プランの設計"},
+ DE:{no:16,name:"夢と現実をつなぐデザインディレクター",desc:"理想の世界観を描きながら、細部や実現条件にも目を配るタイプ。華やかさだけでなく、当日の進行やゲストへの配慮まで含めて提案する。",strength:"完成度の高い提案、理想と実現性の両立"},
+ EA:{no:17,name:"小さな不安も拾うリスクナビゲーター",desc:"細やかな配慮に観察力を加え、お客様が口にしていない心配まで察知するタイプ。問題が大きくなる前に確認し、必要な情報を丁寧に伝える。",strength:"不安の先回り、懸念点の発見、丁寧な説明"},
+ EB:{no:18,name:"心地よさを届けるおもてなしの達人",desc:"正確な対応と温かな人柄で、お客様に安心と居心地のよさを届けるタイプ。初対面でも緊張を和らげ、信頼される関係を築いていく。",strength:"接客品質、信頼の獲得、安心できる空気づくり"},
+ EC:{no:19,name:"確実な一歩を支えるプロフェッショナル",desc:"正確な情報と段取りをもとに、お客様が迷わず進める環境を整えるタイプ。複雑な見積もりや条件もわかりやすく整理し、決断を支援する。",strength:"正確な見積もり説明、段取り、確実なクロージング"},
+ ED:{no:20,name:"細部まで美しく仕上げるクリエイティブキュレーター",desc:"お客様の希望を丁寧に受け止め、衣裳・装花・演出などを細部まで組み合わせるタイプ。独創性と実用性のバランスを大切にし、統一感のある結婚式を提案する。",strength:"細部への配慮、コーディネート提案、完成度の向上"}
 };
 const questions = [
 {q:"休日、知らない街に遊びに来ました。最初にすることは？",o:[["気になる店や路地を歩きながら探す","D"],["口コミや評価を調べて候補を絞る","A"],["地図を見て効率よく回れる順番を考える","C"],["地元の人に話しかけておすすめを聞く","B"],["営業時間や移動手段を確認しておく","E"]]},
@@ -185,28 +227,40 @@ function renderResult(){
  const name=document.createElement("span");name.textContent=types[k].name;
  const val=document.createElement("strong");val.textContent=`${scores[k]}問 · ${total?(scores[k]/total*100).toFixed(1):"0.0"}%`;
  row.append(sw,name,val);$("legend").appendChild(row);});
- const top=ranking[0],second=ranking[1];
- $("winner").innerHTML=`<div class="eyebrow" style="color:#356b91">YOUR TOP STYLE</div><h2>${types[top].name}</h2><p>${types[top].subtitle}</p><p>${types[top].feature}</p><p><strong>次のチャレンジ：</strong>${types[second].name}の視点も取り入れ、接客で使う質問を1つ試してみましょう。</p>`;
- $("rankcards").innerHTML="";
- [top,second].forEach((k,i)=>{const card=document.createElement("div");card.className="rankcard";card.innerHTML=`<div class="ranklabel">${i===0?"1位 · メインスタイル":"2位 · もう1つの武器"}</div><h3 style="margin-top:6px">${types[k].name}</h3><div class="muted">${types[k].subtitle}</div><strong>${scores[k]}問 · ${total?(scores[k]/total*100).toFixed(1):"0.0"}%</strong>`;$("rankcards").appendChild(card);});
- $("typeList").innerHTML="";
- ["A","B","C","D","E"].forEach(k=>{const t=types[k],pct=total?(scores[k]/total*100).toFixed(1):"0.0";const card=document.createElement("article");card.className="type-card";
- const head=document.createElement("div");head.className="type-head";const left=document.createElement("div");left.className="type-name";
- const dot=document.createElement("span");dot.className="type-dot";dot.style.background=t.color;const name=document.createElement("h3");name.textContent=t.name;left.append(dot,name);
- const pctEl=document.createElement("div");pctEl.className="percent";pctEl.textContent=`${pct}%`;head.append(left,pctEl);
- const subtitle=document.createElement("p");subtitle.className="muted";subtitle.textContent=t.subtitle;
- const feature=document.createElement("p");feature.textContent=t.feature;
- const h4=document.createElement("h3");h4.textContent="得意分野";
- const ul=document.createElement("ul");t.strengths.forEach(s=>{const li=document.createElement("li");li.textContent=s;ul.appendChild(li);});
- const tip=document.createElement("div");tip.className="tip";tip.innerHTML=`<strong>接客の糸口</strong><p style="margin:5px 0">${t.opening}</p><p class="muted" style="font-size:.9rem;margin:8px 0 0"><strong>気をつけたいこと：</strong>${t.caution}</p>`;
- card.append(head,subtitle,feature,h4,ul,tip);$("typeList").appendChild(card);
- });
+ const top=ranking[0],second=ranking[1],pctOf=k=>total?(scores[k]/total*100).toFixed(1):"0.0";
+ // 1位×2位の組み合わせスタイル（大きく表示）
+ const cb=combos[top+second];
+ const combo=$("combo");combo.style.setProperty("--c1",types[top].color);combo.style.setProperty("--c2",types[second].color);
+ combo.innerHTML="";
+ const mk=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
+ const pair=mk("div","combo-pair");
+ pair.append(mk("span","t",`1位 ${types[top].name} ${pctOf(top)}%`),mk("span","x","×"),mk("span","t",`2位 ${types[second].name} ${pctOf(second)}%`));
+ const st=mk("div","combo-strength");st.append(mk("strong",null,"営業での強み"),document.createTextNode(cb.strength));
+ combo.append(mk("div","combo-eyebrow","YOUR SALES STYLE"),mk("span","combo-no",`スタイル No.${String(cb.no).padStart(2,"0")} / 20`),mk("h2","combo-name",cb.name),pair,mk("p","combo-desc",cb.desc),st);
+ // 幅を広げる糸口：割合が最も少なかったタイプ
+ const minScore=Math.min(...Object.values(scores));
+ const lows=ranking.filter(k=>scores[k]===minScore);
+ const low=lows[lows.length-1],lt=types[low];
+ const adv=$("advice");adv.innerHTML="";
+ const head=mk("div","advice-head");
+ const eb=mk("div","eyebrow","WIDEN YOUR RANGE");eb.style.color="#9b7b43";
+ head.append(eb,mk("h2",null,`幅を広げる糸口：${lt.name}の視点`),mk("div","muted",`最も割合が少なかったタイプ（${scores[low]}問 · ${pctOf(low)}%）。伸びしろとして、意識して取り入れてみましょう。`));
+ const body=mk("div","advice-body");
+ const ul=mk("ul");lt.strengths.forEach(x=>ul.appendChild(mk("li",null,x)));
+ const q=mk("div","advice-q",`「${lt.opening}」`);
+ const cau=mk("p","muted","");cau.style.fontSize=".92rem";cau.append(mk("strong",null,"使うときの注意："),document.createTextNode(lt.caution));
+ body.append(mk("h3",null,`${lt.name}（${lt.subtitle}）とは`),mk("p",null,lt.feature),mk("h3",null,"取り入れると活きる場面"),ul,mk("h3",null,"まず試したい一言"),q,cau);
+ if(lows.length>1){body.appendChild(mk("p","tie-note",`※ ${lows.map(k=>types[k].name).join("・")}が同じ割合で最少でした。まずは${lt.name}から試してみましょう。`));}
+ adv.append(head,body);
 }
-function resultText(){const scores=getScores(),ranking=getRanking(scores),total=answers.filter(Boolean).length;let out=["営業スタイル診断結果","回答数："+total+"問",""];
- ["A","B","C","D","E"].forEach(k=>out.push(`${types[k].name}：${scores[k]}問（${total?(scores[k]/total*100).toFixed(1):"0.0"}%）`));
- out.push("",`1位：${types[ranking[0]].name}`,types[ranking[0]].feature,"",`2位：${types[ranking[1]].name}`,types[ranking[1]].feature,"","接客の糸口");
- out.push(...["A","B","C","D","E"].map(k=>`${types[k].name}：${types[k].opening}`));
- out.push("","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");return out.join("\n");}
+function resultText(){const scores=getScores(),ranking=getRanking(scores),total=answers.filter(Boolean).length;
+ const p=k=>total?(scores[k]/total*100).toFixed(1):"0.0";const top=ranking[0],second=ranking[1],cb=combos[top+second];
+ const minScore=Math.min(...Object.values(scores)),lows=ranking.filter(k=>scores[k]===minScore),low=lows[lows.length-1],lt=types[low];
+ const out=["営業スタイル診断結果","回答数："+total+"問","",
+  `■ あなたの営業スタイル：${cb.name}`,`（1位 ${types[top].name} × 2位 ${types[second].name}）`,cb.desc,`営業での強み：${cb.strength}`,"","■ 5タイプの割合"];
+ ["A","B","C","D","E"].forEach(k=>out.push(`${types[k].name}：${scores[k]}問（${p(k)}%）`));
+ out.push("",`■ 幅を広げる糸口：${lt.name}（${p(low)}%）`,lt.feature,`試したい一言：${lt.opening}`,`注意：${lt.caution}`,"","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");
+ return out.join("\n");}
 $("startBtn").addEventListener("click",()=>{current=0;renderQuestion();show("quiz");});
 $("prevBtn").addEventListener("click",()=>{if(current>0){current--;renderQuestion();}});
 $("nextBtn").addEventListener("click",()=>{if(!answers[current])return;if(current<questions.length-1){current++;renderQuestion();}else if(answers.every(Boolean)){renderResult();show("result");}else{const missing=answers.findIndex(a=>!a);current=missing;renderQuestion();}});
