@@ -66,6 +66,27 @@ h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
 .advice-body ul{margin:7px 0;padding-left:1.2em}.advice-body li{margin:3px 0}
 .advice-q{background:#f4f7f9;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 10px 10px 0;margin-top:8px;font-weight:600}
 .tie-note{font-size:.88rem;color:var(--muted);margin-top:14px}
+
+.combo-note{font-size:.84rem;opacity:.9;margin:0 0 14px}
+.advice.lv3{border:3px solid var(--gold);box-shadow:0 10px 30px #c6a66b45}
+.advice.lv3 .advice-head{background:linear-gradient(135deg,#f6e4b8,#fbf1d8)}
+.advice.lv2{border:2px solid var(--gold);box-shadow:0 6px 20px #c6a66b25}
+.advice.lv2 .advice-head{background:#f8edd2}
+.advice.lv1{border:1px solid var(--gold)}
+.advice.lv1 .advice-head{background:#fbf5e6}
+.advice-level{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;margin-bottom:6px}
+.advice-level .stars{color:#b98a2c;letter-spacing:.1em;font-weight:800;font-size:1rem}
+.advice-level .level-label{font-weight:800;color:#6b4e12;font-size:.92rem}
+.advice.lv3 .stars{font-size:1.7rem}.advice.lv3 .level-label{font-size:1.3rem}
+.advice.lv2 .stars{font-size:1.4rem}.advice.lv2 .level-label{font-size:1.12rem}
+.advice.lv1 .stars{font-size:1.15rem}.advice.lv1 .level-label{font-size:1rem}
+.advice-intro{margin:6px 0 0;color:var(--ink)}
+.adv-card{border:1px solid var(--line);border-left:5px solid var(--cc);border-radius:12px;padding:16px 18px;margin-top:14px;background:#fff}
+.adv-card:first-child{margin-top:0}
+.adv-top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:.82rem;color:var(--muted);font-weight:700}
+.adv-card h3{margin:6px 0 10px;font-size:1.2rem}
+.adv-card p{margin:6px 0}
+.adv-label{display:block;margin-bottom:1px;font-weight:800;color:var(--navy);font-size:.9rem}
 .footer{text-align:center;color:#87939d;font-size:.78rem;padding:22px 8px}
 @media(max-width:640px){.result-top{grid-template-columns:1fr;gap:12px}.chart-wrap{min-height:220px}.donut{width:220px}.panel{border-radius:17px}.type-card{padding:16px}.quiznav{flex-wrap:wrap}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -179,6 +200,65 @@ const combos = {
  EC:{no:19,name:"確実な一歩を支えるプロフェッショナル",desc:"正確な情報と段取りをもとに、お客様が迷わず進める環境を整えるタイプ。複雑な見積もりや条件もわかりやすく整理し、決断を支援する。",strength:"正確な見積もり説明、段取り、確実なクロージング"},
  ED:{no:20,name:"細部まで美しく仕上げるクリエイティブキュレーター",desc:"お客様の希望を丁寧に受け止め、衣裳・装花・演出などを細部まで組み合わせるタイプ。独創性と実用性のバランスを大切にし、統一感のある結婚式を提案する。",strength:"細部への配慮、コーディネート提案、完成度の向上"}
 };
+const shorts={A:"観察して掘り下げる力",B:"場を和ませる力",C:"整理して前へ進める力",D:"発想力",E:"確認と先回りの力"};
+// 主軸タイプ(最少グループ以外で最も割合が低いタイプ) × 伸ばすタイプ(最少グループ)
+const advices = {
+ AB:{no:1,name:"心を開いてから聞く観察者",weak:"質問や観察は得意でも、雑談や共感で距離を縮める場面が少なく、事情聴取のような印象になりがちです。",tip:"質問の前に、共感の一言か自己開示を1つ入れてみましょう。",say:"今日はここまで、どのくらいかかりましたか？"},
+ AC:{no:2,name:"整理して道を示す観察者",weak:"話を深く聞けても、そこから次の一歩を示せず、情報が溜まったまま終わりがちです。",tip:"聞いた内容を3点に要約し、次に決めることを1つ添えてみましょう。",say:"大切にされたいのは◯◯と△△ですね。次は□□を決めていきましょう"},
+ AD:{no:3,name:"想像を広げる観察者",weak:"事実の確認が中心で、お客様が理想を思い描く時間を作れません。",tip:"聞いた希望を、当日の場面に置き換えて描写してみましょう。",say:"そのご希望が叶うと、当日はこんな場面になりそうですね"},
+ AE:{no:4,name:"先回りして確認する観察者",weak:"本音の深掘りに集中し、予算・人数・時期などの基本条件の確認が抜けることがあります。",tip:"面談の最後に、確認事項を一緒にチェックする時間を設けてみましょう。",say:"最後に、決めるうえで気になる条件を一緒に確認させてください"},
+ BA:{no:5,name:"本音に一歩踏み込む場づくり役",weak:"場は和むものの、会話が表面的になり、本当の希望や不安まで届きにくいことがあります。",tip:"「なぜ」ではなく「きっかけ」を聞くと、詰問にならずに深掘りできます。",say:"そのイメージを大切にしたいと思われたのは、何かきっかけがあったのでしょうか？"},
+ BC:{no:6,name:"盛り上がりを前進に変える場づくり役",weak:"会話は盛り上がっても、結論や次回までの宿題が曖昧なまま終わりがちです。",tip:"終盤に「今日決まったこと」と「次に決めること」を言葉にしましょう。",say:"今日決まったことと、次に決めることを整理してみましょう"},
+ BD:{no:7,name:"思い出を演出に変える場づくり役",weak:"共感はできても、提案が既存プランの説明にとどまりやすいです。",tip:"お客様が語った思い出を、演出アイデアに1つ結びつけてみましょう。",say:"その思い出を当日に取り入れるなら、どんな形が素敵でしょう？"},
+ BE:{no:8,name:"楽しさの先も確認する場づくり役",weak:"楽しい雰囲気を優先して、費用や条件の確認を後回しにしがちです。",tip:"盛り上がったタイミングで、あえて確認の時間を取りましょう。",say:"楽しみなお話の一方で、費用面で気になる点も先にお聞きしてよいですか？"},
+ CA:{no:9,name:"聞いてから提案する案内役",weak:"提案までが早く、お客様の本当の判断基準を聞き込む前に案を出してしまいがちです。",tip:"提案の前に、決め手になるものを2つだけ質問してみましょう。",say:"ご提案の前に、決め手になるものを2つ教えていただけますか？"},
+ CB:{no:10,name:"気持ちに寄り添う案内役",weak:"進行を優先するあまり、お客様の温度感や迷いが置き去りになることがあります。",tip:"説明の区切りごとに、気持ちを確認する一言を挟みましょう。",say:"ここまでのご説明で、率直にどんな印象をお持ちですか？"},
+ CD:{no:11,name:"「らしさ」を足す案内役",weak:"条件に合う提案はできても、他の式場でも言えるような無難な内容になりがちです。",tip:"条件に合う案に、おふたりらしい要素を1つだけ足してみましょう。",say:"条件に合うこちらのプランに、おふたりらしさを加えるなら、何がありそうですか？"},
+ CE:{no:12,name:"注意点まで添える案内役",weak:"前に進めることを優先して、リスクや注意点の説明が薄くなりがちです。",tip:"提案するときに、事前に知っておきたい点を3つセットで伝えましょう。",say:"この案で、事前に知っておいていただきたい点が3つあります"},
+ DA:{no:13,name:"価値観を聞いてから描く発想家",weak:"アイデアが先に出て、お客様の価値観や背景とずれることがあります。",tip:"アイデアを出す前に、普段大切にしていることを聞いてみましょう。",say:"普段のおふたりが大切にしていることを教えていただけますか？"},
+ DB:{no:14,name:"反応を見ながら描く発想家",weak:"発想が先行し、お客様の気持ちが追いついているか確認し損ねることがあります。",tip:"アイデアを出すたびに、反応を聞く習慣をつけましょう。",say:"今のご提案で、ピンとくる部分とそうでない部分はどこですか？"},
+ DC:{no:15,name:"絞り込んで決める発想家",weak:"案が広がるほど、お客様が選べずに迷ってしまいます。",tip:"アイデアを3つに絞り、優先順位をつけるところまで一緒に進めましょう。",say:"アイデアを3つに絞って、優先順位をつけてみましょう"},
+ DE:{no:16,name:"実現条件まで添える発想家",weak:"魅力は伝わっても、費用や準備期間の確認が後回しで、後から壁にぶつかりがちです。",tip:"アイデアには、費用と準備期間の目安をセットで添えましょう。",say:"この演出は、費用と準備期間の目安がこちらです。実現のポイントは…"},
+ EA:{no:17,name:"理由まで掘り下げる確認役",weak:"確認は丁寧でも手続き的で、お客様がその点を気にする理由まで届きにくいです。",tip:"確認のあとに、背景を尋ねる一言を添えてみましょう。",say:"その点を気にされているのは、何か背景があるのでしょうか？"},
+ EB:{no:18,name:"温度を伝える確認役",weak:"正確な説明が続くと、事務的で距離のある印象になることがあります。",tip:"説明の冒頭と結びに、気持ちの伝わる一言を入れましょう。",say:"ご説明が多くなりますが、気になる点はいつでも止めてくださいね"},
+ EC:{no:19,name:"次の一歩につなげる確認役",weak:"情報は正確でも、お客様が「で、次は何をすれば？」となりやすいです。",tip:"説明のあとに、次の一歩を1つだけ示しましょう。",say:"次回までに、◯◯だけ決めておくと進めやすいです"},
+ ED:{no:20,name:"楽しみも添える確認役",weak:"安心を重視するあまり、提案が無難になり、わくわく感が不足しがちです。",tip:"注意点を伝えたあとに、楽しみになる演出例を1つ添えましょう。",say:"安心して準備いただける形を整えたうえで、当日こんな演出も叶えられます"}
+};
+function adviceLevel(n){
+ if(n===0)return{lv:3,stars:"★★★",label:"最大の伸びしろ",msg:"意識して使えば、接客の幅が最も大きく広がります。"};
+ if(n===1)return{lv:2,stars:"★★☆",label:"大きな伸びしろ",msg:"ほとんど使えていない視点です。意識して使うだけで、提案の説得力が上がります。"};
+ if(n<=3)return{lv:1,stars:"★☆☆",label:"伸ばしどころ",msg:"使う場面が少なめの視点です。得意な武器にもう一つ足してみましょう。"};
+ return{lv:0,stars:"☆☆☆",label:"さらに磨く",msg:"バランスよく使えています。さらに磨くなら、この視点を意識してみましょう。"};
+}
+// 幅を広げる糸口の算出：最少タイプ全員を対象にし、強さは最少の回答数で決める
+function getAdvicePlan(scores,ranking,total){
+ const minScore=Math.min(...Object.values(scores));
+ const lows=ranking.filter(k=>scores[k]===minScore);
+ const balanced=lows.length===ranking.length;
+ const rest=ranking.filter(k=>scores[k]!==minScore);
+ const main=balanced?ranking[0]:rest[rest.length-1];
+ const targets=balanced?ranking.slice(1):lows;
+ const pct=k=>total?(scores[k]/total*100).toFixed(1):"0.0";
+ const names=targets.map(k=>types[k].name).join("・"),n=targets.length,multi=n>1;
+ let lv,title,intro;
+ if(balanced){
+  lv={lv:0,stars:"☆☆☆",label:"バランス型",msg:""};
+  title=`${types[main].name}を軸に広げる${n}つの視点`;
+  intro=`5タイプがすべて同じ回答数で、どの視点もバランスよく使えている状態です。まずは${types[main].name}（${shorts[main]}）を軸に、ほかの視点を順に試してみましょう。`;
+ }else{
+  lv=adviceLevel(minScore);
+  title=multi?`${minScore===0?"まだ使っていない":"使う場面が少ない"}${n}つの視点`:`${types[targets[0]].name}の視点`;
+  if(minScore===0){
+   const pre=scores[main]===total?`今回の回答は${types[main].name}一色でした。${shorts[main]}は大きな武器です。一方で、`:"";
+   intro=multi
+    ?`${pre}${names}の${n}タイプは今回一度も選ばれませんでした。${pre?"":shorts[main]+"を軸に、"}順に取り入れてみましょう。${lv.msg}`
+    :`${pre}${names}は今回一度も選ばれなかった視点です。${lv.msg}`;
+  }else{
+   intro=`最も少なかったのは${names}${multi?`の${n}タイプ（各${minScore}問）`:`（${minScore}問 · ${pct(targets[0])}%）`}です。${lv.msg}`;
+  }
+ }
+ return{minScore,lows,balanced,main,targets,lv,title,intro,pct};
+}
 const questions = [
 {q:"休日、知らない街に遊びに来ました。最初にすることは？",o:[["気になる店や路地を歩きながら探す","D"],["口コミや評価を調べて候補を絞る","A"],["地図を見て効率よく回れる順番を考える","C"],["地元の人に話しかけておすすめを聞く","B"],["営業時間や移動手段を確認しておく","E"]]},
 {q:"友人たちと旅行の計画を立てています。あなたの役割は？",o:[["みんなが楽しめそうな案を出して盛り上げる","B"],["候補を比較して、それぞれの違いを整理する","A"],["旅先でできそうな面白い体験を考える","D"],["日程や予算を確認して実現できる計画にする","E"],["意見を聞いて、決めるべきことを順番に進める","C"]]},
@@ -228,39 +308,53 @@ function renderResult(){
  const val=document.createElement("strong");val.textContent=`${scores[k]}問 · ${total?(scores[k]/total*100).toFixed(1):"0.0"}%`;
  row.append(sw,name,val);$("legend").appendChild(row);});
  const top=ranking[0],second=ranking[1],pctOf=k=>total?(scores[k]/total*100).toFixed(1):"0.0";
- // 1位×2位の組み合わせスタイル（大きく表示）
- const cb=combos[top+second];
- const combo=$("combo");combo.style.setProperty("--c1",types[top].color);combo.style.setProperty("--c2",types[second].color);
- combo.innerHTML="";
  const mk=(tag,cls,txt)=>{const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e;};
- const pair=mk("div","combo-pair");
- pair.append(mk("span","t",`1位 ${types[top].name} ${pctOf(top)}%`),mk("span","x","×"),mk("span","t",`2位 ${types[second].name} ${pctOf(second)}%`));
- const st=mk("div","combo-strength");st.append(mk("strong",null,"営業での強み"),document.createTextNode(cb.strength));
- combo.append(mk("div","combo-eyebrow","YOUR SALES STYLE"),mk("span","combo-no",`スタイル No.${String(cb.no).padStart(2,"0")} / 20`),mk("h2","combo-name",cb.name),pair,mk("p","combo-desc",cb.desc),st);
- // 幅を広げる糸口：割合が最も少なかったタイプ
- const minScore=Math.min(...Object.values(scores));
- const lows=ranking.filter(k=>scores[k]===minScore);
- const low=lows[lows.length-1],lt=types[low];
- const adv=$("advice");adv.innerHTML="";
+ // 1位×2位の組み合わせスタイル（大きく表示）。2位が0%の場合は1位タイプ単独で表示
+ const combo=$("combo");combo.innerHTML="";
+ combo.style.setProperty("--c1",types[top].color);
+ if(scores[second]===0){
+  combo.style.setProperty("--c2","#172c43");
+  const pair=mk("div","combo-pair");pair.append(mk("span","t",`1位 ${types[top].name} ${pctOf(top)}%`));
+  const st=mk("div","combo-strength");st.append(mk("strong",null,"営業での強み"),document.createTextNode(types[top].strengths.join("、")));
+  combo.append(mk("div","combo-eyebrow","YOUR SALES STYLE"),mk("span","combo-no",types[top].subtitle),mk("h2","combo-name",types[top].name),pair,mk("p","combo-desc",types[top].feature),mk("p","combo-note","2位以降の回答がなかったため、1位タイプの特徴を表示しています。"),st);
+ }else{
+  const cb=combos[top+second];
+  combo.style.setProperty("--c2",types[second].color);
+  const pair=mk("div","combo-pair");
+  pair.append(mk("span","t",`1位 ${types[top].name} ${pctOf(top)}%`),mk("span","x","×"),mk("span","t",`2位 ${types[second].name} ${pctOf(second)}%`));
+  const st=mk("div","combo-strength");st.append(mk("strong",null,"営業での強み"),document.createTextNode(cb.strength));
+  combo.append(mk("div","combo-eyebrow","YOUR SALES STYLE"),mk("span","combo-no",`スタイル No.${String(cb.no).padStart(2,"0")} / 20`),mk("h2","combo-name",cb.name),pair,mk("p","combo-desc",cb.desc),st);
+ }
+ // 幅を広げる糸口：最少タイプ全員を対象に、少ないほど強く表示
+ const plan=getAdvicePlan(scores,ranking,total);
+ const adv=$("advice");adv.innerHTML="";adv.className="advice lv"+plan.lv.lv;
  const head=mk("div","advice-head");
- const eb=mk("div","eyebrow","WIDEN YOUR RANGE");eb.style.color="#9b7b43";
- head.append(eb,mk("h2",null,`幅を広げる糸口：${lt.name}の視点`),mk("div","muted",`最も割合が少なかったタイプ（${scores[low]}問 · ${pctOf(low)}%）。伸びしろとして、意識して取り入れてみましょう。`));
+ const lvRow=mk("div","advice-level");const eb=mk("span","eyebrow","WIDEN YOUR RANGE");eb.style.color="#9b7b43";
+ lvRow.append(eb,mk("span","stars",plan.lv.stars),mk("span","level-label",plan.lv.label));
+ head.append(lvRow,mk("h2",null,`幅を広げる糸口：${plan.title}`),mk("p","advice-intro",plan.intro));
  const body=mk("div","advice-body");
- const ul=mk("ul");lt.strengths.forEach(x=>ul.appendChild(mk("li",null,x)));
- const q=mk("div","advice-q",`「${lt.opening}」`);
- const cau=mk("p","muted","");cau.style.fontSize=".92rem";cau.append(mk("strong",null,"使うときの注意："),document.createTextNode(lt.caution));
- body.append(mk("h3",null,`${lt.name}（${lt.subtitle}）とは`),mk("p",null,lt.feature),mk("h3",null,"取り入れると活きる場面"),ul,mk("h3",null,"まず試したい一言"),q,cau);
- if(lows.length>1){body.appendChild(mk("p","tie-note",`※ ${lows.map(k=>types[k].name).join("・")}が同じ割合で最少でした。まずは${lt.name}から試してみましょう。`));}
+ plan.targets.forEach(t=>{
+  const ad=advices[plan.main+t];
+  const card=mk("div","adv-card");card.style.setProperty("--cc",types[t].color);
+  const top2=mk("div","adv-top");top2.append(mk("span",null,`No.${String(ad.no).padStart(2,"0")} · ${types[plan.main].name.replace("タイプ","")} × ${types[t].name.replace("タイプ","")}`),mk("span",null,`${types[t].name} ${scores[t]}問 · ${plan.pct(t)}%`));
+  const p1=mk("p");p1.append(mk("span","adv-label","手薄になりやすい点"),document.createTextNode(ad.weak));
+  const p2=mk("p");p2.append(mk("span","adv-label","広げる糸口"),document.createTextNode(ad.tip));
+  card.append(top2,mk("h3",null,ad.name),p1,p2,mk("div","advice-q",`「${ad.say}」`));
+  body.appendChild(card);
+ });
  adv.append(head,body);
 }
 function resultText(){const scores=getScores(),ranking=getRanking(scores),total=answers.filter(Boolean).length;
- const p=k=>total?(scores[k]/total*100).toFixed(1):"0.0";const top=ranking[0],second=ranking[1],cb=combos[top+second];
- const minScore=Math.min(...Object.values(scores)),lows=ranking.filter(k=>scores[k]===minScore),low=lows[lows.length-1],lt=types[low];
- const out=["営業スタイル診断結果","回答数："+total+"問","",
-  `■ あなたの営業スタイル：${cb.name}`,`（1位 ${types[top].name} × 2位 ${types[second].name}）`,cb.desc,`営業での強み：${cb.strength}`,"","■ 5タイプの割合"];
+ const p=k=>total?(scores[k]/total*100).toFixed(1):"0.0";const top=ranking[0],second=ranking[1];
+ const out=["営業スタイル診断結果","回答数："+total+"問",""];
+ if(scores[second]===0){out.push(`■ あなたの営業スタイル：${types[top].name}（${types[top].subtitle}）`,types[top].feature,`営業での強み：${types[top].strengths.join("、")}`);}
+ else{const cb=combos[top+second];out.push(`■ あなたの営業スタイル：${cb.name}`,`（1位 ${types[top].name} × 2位 ${types[second].name}）`,cb.desc,`営業での強み：${cb.strength}`);}
+ out.push("","■ 5タイプの割合");
  ["A","B","C","D","E"].forEach(k=>out.push(`${types[k].name}：${scores[k]}問（${p(k)}%）`));
- out.push("",`■ 幅を広げる糸口：${lt.name}（${p(low)}%）`,lt.feature,`試したい一言：${lt.opening}`,`注意：${lt.caution}`,"","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");
- return out.join("\n");}
+ const plan=getAdvicePlan(scores,ranking,total);
+ out.push("",`■ 幅を広げる糸口 ${plan.lv.stars} ${plan.lv.label}`,plan.title,plan.intro);
+ plan.targets.forEach(t=>{const ad=advices[plan.main+t];out.push("",`【${ad.name}】${types[plan.main].name} × ${types[t].name}（${p(t)}%）`,`手薄になりやすい点：${ad.weak}`,`広げる糸口：${ad.tip}`,`試したい一言：${ad.say}`);});
+ out.push("","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");return out.join("\n");}
 $("startBtn").addEventListener("click",()=>{current=0;renderQuestion();show("quiz");});
 $("prevBtn").addEventListener("click",()=>{if(current>0){current--;renderQuestion();}});
 $("nextBtn").addEventListener("click",()=>{if(!answers[current])return;if(current<questions.length-1){current++;renderQuestion();}else if(answers.every(Boolean)){renderResult();show("result");}else{const missing=answers.findIndex(a=>!a);current=missing;renderQuestion();}});
