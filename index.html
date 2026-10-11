@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172c43">
+<title>営業スタイル診断 | あなたの強みを見つけよう</title>
+<style>
+:root{--navy:#172c43;--blue:#356b91;--pale:#edf3f7;--ink:#243342;--muted:#657586;--line:#dbe3e9;--gold:#c6a66b;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP","Yu Gothic UI",Meiryo,sans-serif;line-height:1.65}
+button{font:inherit;cursor:pointer}button:focus-visible{outline:3px solid #e3b95f;outline-offset:3px}
+.wrap{width:min(900px,100%);margin:0 auto;padding:clamp(16px,4vw,34px)}
+.brand{font-size:.78rem;letter-spacing:.14em;color:var(--muted);font-weight:700;margin-bottom:16px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:22px;padding:clamp(20px,5vw,42px);box-shadow:0 12px 36px #172c430d}
+.hero{background:linear-gradient(135deg,#172c43,#2f5d7d);color:white;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:260px;height:260px;border:1px solid #ffffff20;border-radius:50%;right:-80px;top:-90px;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff05}
+.eyebrow{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:#d7c39a;font-weight:700}
+h1{font-size:clamp(2rem,6vw,3.5rem);line-height:1.22;margin:.55em 0 .4em;letter-spacing:.02em}
+h2{font-size:clamp(1.35rem,4vw,2rem);line-height:1.4;margin:0 0 12px}
+h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
+.muted{color:var(--muted)}.hero .muted{color:#d8e2ea}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0}.pill{border:1px solid #ffffff55;border-radius:99px;padding:5px 11px;font-size:.84rem}
+.btn{border:0;border-radius:12px;padding:13px 20px;font-weight:700;transition:transform .15s,opacity .15s}
+.btn:hover{transform:translateY(-1px)}.primary{background:var(--gold);color:#172c43}.secondary{background:#eaf0f4;color:var(--navy)}.outline{background:white;border:1px solid var(--line);color:var(--navy)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.btnrow .btn{flex:1;min-width:140px}
+.note{font-size:.9rem;color:var(--muted);margin-top:14px}
+.hidden{display:none!important}
+.progress-head{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:.9rem;color:var(--muted);margin-bottom:9px}
+.track{height:8px;border-radius:99px;background:#e7edf1;overflow:hidden}.fill{height:100%;width:0;background:var(--blue);transition:width .2s}
+.question-card{margin-top:22px}.q-number{font-size:.8rem;letter-spacing:.12em;color:var(--blue);font-weight:800}
+.question{font-size:clamp(1.25rem,3.6vw,1.7rem);line-height:1.5;margin:8px 0 22px}
+.options{display:grid;gap:10px}.option{display:flex;align-items:flex-start;gap:12px;text-align:left;background:white;border:1px solid var(--line);border-radius:13px;padding:14px 15px;color:var(--ink);width:100%;transition:border .15s,background .15s}
+.option:hover{border-color:#8aa9bf;background:#f7fafc}.option.selected{border-color:var(--blue);background:#edf5fa;box-shadow:inset 0 0 0 1px var(--blue)}
+.letter{flex:0 0 29px;height:29px;border-radius:50%;display:grid;place-items:center;background:#edf1f4;color:var(--navy);font-weight:800;font-size:.85rem}
+.option.selected .letter{background:var(--blue);color:white}
+.quiznav{display:flex;gap:10px;margin-top:22px}.quiznav button{flex:1}
+.result-top{display:grid;grid-template-columns:minmax(220px,.85fr) 1.15fr;gap:28px;align-items:center}
+.chart-wrap{display:grid;place-items:center;position:relative;min-height:260px}
+.donut{width:min(100%,300px);aspect-ratio:1;border-radius:50%;position:relative;background:conic-gradient(#356b91 0 20%,#c6a66b 20% 40%,#6e9c8b 40% 60%,#9b8bb8 60% 80%,#d28b76 80% 100%)}
+.donut:after{content:"";position:absolute;inset:24%;background:white;border-radius:50%}
+.chart-center{position:absolute;z-index:1;text-align:center;display:grid;place-items:center;line-height:1.35}.chart-center strong{font-size:2rem;color:var(--navy)}
+.legend{display:grid;gap:10px}.legend-row{display:grid;grid-template-columns:12px 1fr auto;gap:9px;align-items:center;font-size:.95rem}.swatch{width:12px;height:12px;border-radius:3px}.legend-row strong{font-variant-numeric:tabular-nums}
+.winner{background:var(--pale);border-radius:16px;padding:20px;margin-top:20px}
+.rankcards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0}
+.rankcard{border:1px solid var(--line);border-radius:14px;padding:15px}.ranklabel{font-size:.76rem;color:var(--muted);font-weight:700}
+.type-list{display:grid;gap:14px;margin-top:22px}.type-card{border:1px solid var(--line);border-radius:16px;padding:20px}.type-head{display:flex;justify-content:space-between;gap:12px;align-items:start}.type-name{display:flex;gap:10px;align-items:center}.type-dot{width:13px;height:13px;border-radius:4px;flex-shrink:0}.percent{font-size:1.2rem;font-weight:800;white-space:nowrap}
+.type-card p{margin:8px 0}.type-card ul{margin:7px 0 12px;padding-left:1.2em}.type-card li{margin:3px 0}.tip{background:#f4f7f9;border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 10px 10px 0;margin-top:12px}
+.result-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.result-actions .btn{flex:1;min-width:160px}
+.footer{text-align:center;color:#87939d;font-size:.78rem;padding:22px 8px}
+@media(max-width:640px){.result-top{grid-template-columns:1fr;gap:12px}.chart-wrap{min-height:220px}.donut{width:220px}.rankcards{grid-template-columns:1fr}.panel{border-radius:17px}.type-card{padding:16px}.quiznav{flex-wrap:wrap}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">FIVESTAR WEDDING · TRAINING TOOL</div>
+  <section id="start" class="panel hero">
+    <div class="eyebrow">Sales Style Discovery</div>
+    <h1>あなたの<br>営業スタイルは？</h1>
+    <p class="lead">日常の選択から、自分らしい接客の強みを見つける15問の診断です。</p>
+    <div class="pills"><span class="pill">全15問</span><span class="pill">所要時間 約5分</span><span class="pill">5つのスタイル</span></div>
+    <h3>診断ルール</h3>
+    <ul>
+      <li>正解・不正解はありません。直感で選んでください。</li>
+      <li>営業に直接関係のない日常の質問もあります。</li>
+      <li>結果は能力の優劣ではなく、回答から見える行動傾向です。</li>
+      <li>回答はこのブラウザー内で集計され、サーバーには送信されません。</li>
+    </ul>
+    <div class="btnrow"><button id="startBtn" class="btn primary">診断をはじめる →</button></div>
+  </section>
+
+  <section id="quiz" class="panel hidden" aria-live="polite">
+    <div class="progress-head"><span id="progressLabel">QUESTION 01 / 15</span><span id="answeredLabel">回答済み 0 / 15</span></div>
+    <div class="track" role="progressbar" aria-label="診断の進捗" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0" id="progressTrack"><div class="fill" id="progressFill"></div></div>
+    <div class="question-card">
+      <div class="q-number" id="qNumber">QUESTION 01</div>
+      <h2 class="question" id="questionText"></h2>
+      <div class="options" id="options"></div>
+    </div>
+    <div class="quiznav">
+      <button id="prevBtn" class="btn secondary">← 前の質問</button>
+      <button id="nextBtn" class="btn primary" disabled>次の質問 →</button>
+    </div>
+    <p class="note">選択肢をクリックすると回答が保存されます。回答済みの質問はあとから変更できます。</p>
+  </section>
+
+  <section id="result" class="panel hidden">
+    <div class="eyebrow" style="color:#9b7b43">Your Result</div>
+    <h2>あなたの営業スタイル分析</h2>
+    <p class="muted">回答した15問の選択傾向を集計しています。割合は営業能力の高さを示すものではありません。</p>
+    <div class="result-top">
+      <div class="chart-wrap">
+        <div id="donut" class="donut" role="img" aria-label="5タイプの回答割合を示す円グラフ"></div>
+        <div class="chart-center"><span class="muted" style="font-size:.8rem">回答数</span><strong>15</strong><span class="muted" style="font-size:.8rem">TOTAL</span></div>
+      </div>
+      <div id="legend" class="legend"></div>
+    </div>
+    <div class="winner" id="winner"></div>
+    <div class="rankcards" id="rankcards"></div>
+    <h2 style="margin-top:30px">5タイプの特徴と接客の糸口</h2>
+    <p class="muted">自分の上位タイプだけでなく、意識して使いたい別タイプの視点も確認してみましょう。</p>
+    <div class="type-list" id="typeList"></div>
+    <div class="result-actions">
+      <button id="copyBtn" class="btn primary">結果をコピー</button>
+      <button id="restartBtn" class="btn secondary">もう一度診断する</button>
+      <button id="backToQuizBtn" class="btn outline">回答を見直す</button>
+    </div>
+    <p id="copyStatus" class="note" role="status"></p>
+  </section>
+  <div class="footer">研修用セルフチェック · 結果は自己理解と接客練習のきっかけとしてご活用ください。</div>
+</main>
+<script>
+const types = {
+ A:{name:"探偵タイプ",subtitle:"観察・分析・深掘り",color:"#356b91",
+   feature:"相手の発言や反応からヒントを集め、言葉の背景にある希望や懸念を読み解こうとします。情報を整理し、納得してから判断する傾向があります。",
+   strengths:["潜在的なニーズや本音を探る","他社との比較理由や判断基準を把握する","曖昧な要望を具体的な質問に変える"],
+   opening:"そのイメージを大切にしたいと思われたのは、何かきっかけがあったのでしょうか？",
+   caution:"質問が続きすぎると尋問のように感じられることも。共感や要約を挟みましょう。"},
+ B:{name:"ムードメーカータイプ",subtitle:"共感・関係構築・安心感",color:"#d28b76",
+   feature:"相手の気持ちや場の空気を大切にし、自然な会話から信頼関係をつくります。相手が楽しんでいるか、安心しているかを気にかけます。",
+   strengths:["初対面のお客様との距離を縮める","緊張や不安を和らげる","おふたりやご家族の思い出を引き出す"],
+   opening:"おふたりで結婚式の話をするとき、どんな時間が一番楽しいですか？",
+   caution:"会話が盛り上がっても、予算や決定条件など確認すべき事項を後回しにしないようにしましょう。"},
+ C:{name:"ナビゲータータイプ",subtitle:"提案・整理・意思決定支援",color:"#6e9c8b",
+   feature:"複数の情報や選択肢を整理し、相手が次に何をすべきかを明確にします。ゴールに向かって話を進めることが得意です。",
+   strengths:["会場案内から見積もり説明へ展開する","希望条件に合う会場・プランを提案する","比較検討を整理し、意思決定を支える"],
+   opening:"いくつか希望がある中で、これだけは外したくないと思うものはどれでしょう？",
+   caution:"結論を急ぐと、お客様が気持ちを整理する時間を失います。提案前に認識を確認しましょう。"},
+ D:{name:"クリエイタータイプ",subtitle:"発想・想像力・体験設計",color:"#9b8bb8",
+   feature:"既存の選択肢にとらわれず、要素を組み合わせて新しい可能性を考えます。具体的なイメージを膨らませることが得意です。",
+   strengths:["おふたりらしい結婚式を企画する","演出・衣裳・装飾を組み合わせて提案する","会場の魅力を当日の体験として伝える"],
+   opening:"もし予算や形式をいったん気にせず考えられるなら、どんな一日になったら最高ですか？",
+   caution:"アイデアが先行しすぎないよう、費用・時間・実施可否まで具体化しましょう。"},
+ E:{name:"コンシェルジュタイプ",subtitle:"安心・正確性・リスク管理",color:"#c6a66b",
+   feature:"相手が困りそうなことを先回りして考え、抜け漏れを防ぎます。曖昧な点を解消し、安心して判断できる状態をつくります。",
+   strengths:["見積もりや料金条件を説明する","準備スケジュールや段取りを案内する","ご家族の懸念や不安要素を解消する"],
+   opening:"会場を決めるにあたって、今のうちに確認しておきたいことや、不安に感じていることはありますか？",
+   caution:"注意事項だけで終わらず、安心材料と実現できる楽しみの両方を伝えましょう。"}
+};
+const questions = [
+{q:"休日、知らない街に遊びに来ました。最初にすることは？",o:[["気になる店や路地を歩きながら探す","D"],["口コミや評価を調べて候補を絞る","A"],["地図を見て効率よく回れる順番を考える","C"],["地元の人に話しかけておすすめを聞く","B"],["営業時間や移動手段を確認しておく","E"]]},
+{q:"友人たちと旅行の計画を立てています。あなたの役割は？",o:[["みんなが楽しめそうな案を出して盛り上げる","B"],["候補を比較して、それぞれの違いを整理する","A"],["旅先でできそうな面白い体験を考える","D"],["日程や予算を確認して実現できる計画にする","E"],["意見を聞いて、決めるべきことを順番に進める","C"]]},
+{q:"初めて入ったカフェで、注文したものがなかなか届きません。どうする？",o:[["店員さんの様子を見て、声をかけるタイミングを考える","A"],["店員さんに明るく声をかけて確認する","B"],["状況を伝え、いつ頃届くか確認する","C"],["別のメニューや過ごし方も含めて楽しむ","D"],["注文内容や経過時間を確認してから問い合わせる","E"]]},
+{q:"謎解きゲームに参加。行き詰まったとき、どうする？",o:[["手がかりを整理し、見落としがないか探す","A"],["仲間と話しながらヒントを引き出す","B"],["解けそうな手がかりから順番に試す","C"],["それまでと違う発想で考え直す","D"],["ルールや条件をもう一度確認する","E"]]},
+{q:"友人が『最近、なんだかうまくいかない』と話しています。最初に何をする？",o:[["何があったのか、具体的な出来事を聞く","A"],["まず気持ちに寄り添い、話しやすい雰囲気をつくる","B"],["今できることを一緒に考える","C"],["気分が変わるような別の過ごし方を提案する","D"],["困っていることを整理して、一つずつ解決する","E"]]},
+{q:"プレゼントを選ぶとき、一番重視するのは？",o:[["相手の好みや最近の発言からヒントを探す","A"],["渡したときの表情や一緒に過ごす時間","B"],["相手が本当に使いやすく、喜んでくれること","C"],["自分では選ばなさそうな意外性や驚き","D"],["品質や価格、使い勝手などの確かさ","E"]]},
+{q:"会議で突然『何か意見はありますか？』と聞かれました。",o:[["これまでの話を整理して、根拠のある意見を伝える","A"],["周囲の反応を見ながら、話しやすい形で発言する","B"],["結論と次にやるべきことを提案する","C"],["別の視点や新しいアイデアを出す","D"],["実現性やリスクを確認してから意見を伝える","E"]]},
+{q:"新しいスマートフォンを買うことにしました。あなたの選び方は？",o:[["スペックやレビューを徹底的に比較する","A"],["詳しい人の感想やおすすめを聞く","B"],["用途に合う候補を絞り、最適なものを選ぶ","C"],["今までにない機能やデザインに惹かれる","D"],["保証やサポート、長く使えるかを確認する","E"]]},
+{q:"初対面の人が集まるパーティー。あなたはどう過ごす？",o:[["相手の話し方や興味を観察して会話の糸口を探す","A"],["自分から話しかけ、場を和ませる","B"],["共通点を見つけて会話を広げる","C"],["面白そうな話題や人の輪に飛び込んでみる","D"],["相手が居心地よく過ごせているか気にかける","E"]]},
+{q:"レストランでメニューを選ぶとき、あなたは？",o:[["食材や調理法、レビューを見て判断する","A"],["店員さんにおすすめを聞いてみる","B"],["同行者の好みも踏まえて、注文をまとめる","C"],["見たことのない料理や意外な組み合わせを試す","D"],["量や価格、アレルギーなどを確認する","E"]]},
+{q:"チームでイベントを企画することになりました。最初にすることは？",o:[["過去の事例や参加者の傾向を調べる","A"],["メンバーの希望を聞き、みんなが楽しめる雰囲気をつくる","B"],["目的とゴールを決め、役割を割り振る","C"],["テーマや演出のアイデアをたくさん出す","D"],["予算、期限、必要な準備を確認する","E"]]},
+{q:"買ったばかりの家具を組み立てます。あなたは？",o:[["説明書を読み、構造を理解してから始める","A"],["誰かと話しながら楽しく進める","B"],["完成までの手順を考え、順番に進める","C"],["多少アレンジしながら、自分なりに組み立てる","D"],["部品と工具を確認し、間違いがないように進める","E"]]},
+{q:"友人が引っ越し先を迷っています。どうアドバイスする？",o:[["通勤時間や周辺環境など、判断材料を集める","A"],["本人がどんな暮らしを望んでいるか、じっくり聞く","B"],["条件に優先順位をつけて候補を絞る","C"],["今までとは違う街や暮らし方も提案する","D"],["家賃や契約条件、生活上のリスクを確認する","E"]]},
+{q:"旅行中に突然の雨。予定していた屋外観光ができません。",o:[["天気や交通情報を調べ、状況を把握する","A"],["一緒にいる人の気分を確認し、前向きに切り替える","B"],["近くの屋内施設を探して予定を組み直す","C"],["雨の日だからこそ楽しめる場所を探す","D"],["移動や予約、費用への影響を確認する","E"]]},
+{q:"あなたが何かを人に教えるとき、つい意識するのは？",o:[["相手がどこでつまずいているかを見極める","A"],["相手が質問しやすい雰囲気をつくる","B"],["理解しやすい順番で説明し、次の行動につなげる","C"],["身近な例や面白いたとえでイメージさせる","D"],["誤解がないよう、条件や注意点まで伝える","E"]]}
+];
+let current=0;
+let answers=Array(questions.length).fill(null);
+const $=id=>document.getElementById(id);
+function show(id){["start","quiz","result"].forEach(s=>$(s).classList.toggle("hidden",s!==id));window.scrollTo({top:0,behavior:"smooth"});}
+function renderQuestion(){
+ const q=questions[current];$("progressLabel").textContent=`QUESTION ${String(current+1).padStart(2,"0")} / ${questions.length}`;
+ const answered=answers.filter(Boolean).length;$("answeredLabel").textContent=`回答済み ${answered} / ${questions.length}`;
+ $("progressFill").style.width=`${answered/questions.length*100}%`;$("progressTrack").setAttribute("aria-valuenow",answered);
+ $("qNumber").textContent=`QUESTION ${String(current+1).padStart(2,"0")}`;$("questionText").textContent=q.q;
+ $("options").innerHTML="";
+ q.o.forEach((o,i)=>{const b=document.createElement("button");b.type="button";b.className="option"+(answers[current]===o[1]?" selected":"");b.setAttribute("aria-pressed",answers[current]===o[1]?"true":"false");
+ const letter=document.createElement("span");letter.className="letter";letter.textContent=String.fromCharCode(65+i);
+ const txt=document.createElement("span");txt.textContent=o[0];b.append(letter,txt);b.addEventListener("click",()=>{answers[current]=o[1];renderQuestion();});$("options").appendChild(b);});
+ $("prevBtn").disabled=current===0;$("prevBtn").style.opacity=current===0?".45":"1";
+ $("nextBtn").disabled=!answers[current];$("nextBtn").textContent=current===questions.length-1?"結果を見る →":"次の質問 →";
+}
+function getScores(){const s={A:0,B:0,C:0,D:0,E:0};answers.forEach(a=>{if(a)s[a]++});return s;}
+function getRanking(scores){return Object.keys(types).sort((a,b)=>scores[b]-scores[a]||"ABCDE".indexOf(a)-"ABCDE".indexOf(b));}
+function renderResult(){
+ const scores=getScores(),ranking=getRanking(scores),total=answers.filter(Boolean).length;
+ // Build a real conic-gradient chart; zero-score types remain in the legend.
+ let angle=0,stops=[];
+ ranking.forEach(k=>{const share=total?scores[k]/total*360:0;if(share>0){stops.push(`${types[k].color} ${angle}deg ${angle+share}deg`);angle+=share;}});
+ $("donut").style.background=stops.length?`conic-gradient(${stops.join(",")})`:"#e7edf1";
+ $("donut").setAttribute("aria-label",Object.keys(types).map(k=>`${types[k].name}${total?(scores[k]/total*100).toFixed(1):"0.0"}%`).join("、"));
+ $("legend").innerHTML="";
+ ["A","B","C","D","E"].forEach(k=>{const row=document.createElement("div");row.className="legend-row";
+ const sw=document.createElement("span");sw.className="swatch";sw.style.background=types[k].color;
+ const name=document.createElement("span");name.textContent=types[k].name;
+ const val=document.createElement("strong");val.textContent=`${scores[k]}問 · ${total?(scores[k]/total*100).toFixed(1):"0.0"}%`;
+ row.append(sw,name,val);$("legend").appendChild(row);});
+ const top=ranking[0],second=ranking[1];
+ $("winner").innerHTML=`<div class="eyebrow" style="color:#356b91">YOUR TOP STYLE</div><h2>${types[top].name}</h2><p>${types[top].subtitle}</p><p>${types[top].feature}</p><p><strong>次のチャレンジ：</strong>${types[second].name}の視点も取り入れ、接客で使う質問を1つ試してみましょう。</p>`;
+ $("rankcards").innerHTML="";
+ [top,second].forEach((k,i)=>{const card=document.createElement("div");card.className="rankcard";card.innerHTML=`<div class="ranklabel">${i===0?"1位 · メインスタイル":"2位 · もう1つの武器"}</div><h3 style="margin-top:6px">${types[k].name}</h3><div class="muted">${types[k].subtitle}</div><strong>${scores[k]}問 · ${total?(scores[k]/total*100).toFixed(1):"0.0"}%</strong>`;$("rankcards").appendChild(card);});
+ $("typeList").innerHTML="";
+ ["A","B","C","D","E"].forEach(k=>{const t=types[k],pct=total?(scores[k]/total*100).toFixed(1):"0.0";const card=document.createElement("article");card.className="type-card";
+ const head=document.createElement("div");head.className="type-head";const left=document.createElement("div");left.className="type-name";
+ const dot=document.createElement("span");dot.className="type-dot";dot.style.background=t.color;const name=document.createElement("h3");name.textContent=t.name;left.append(dot,name);
+ const pctEl=document.createElement("div");pctEl.className="percent";pctEl.textContent=`${pct}%`;head.append(left,pctEl);
+ const subtitle=document.createElement("p");subtitle.className="muted";subtitle.textContent=t.subtitle;
+ const feature=document.createElement("p");feature.textContent=t.feature;
+ const h4=document.createElement("h3");h4.textContent="得意分野";
+ const ul=document.createElement("ul");t.strengths.forEach(s=>{const li=document.createElement("li");li.textContent=s;ul.appendChild(li);});
+ const tip=document.createElement("div");tip.className="tip";tip.innerHTML=`<strong>接客の糸口</strong><p style="margin:5px 0">${t.opening}</p><p class="muted" style="font-size:.9rem;margin:8px 0 0"><strong>気をつけたいこと：</strong>${t.caution}</p>`;
+ card.append(head,subtitle,feature,h4,ul,tip);$("typeList").appendChild(card);
+ });
+}
+function resultText(){const scores=getScores(),ranking=getRanking(scores),total=answers.filter(Boolean).length;let out=["営業スタイル診断結果","回答数："+total+"問",""];
+ ["A","B","C","D","E"].forEach(k=>out.push(`${types[k].name}：${scores[k]}問（${total?(scores[k]/total*100).toFixed(1):"0.0"}%）`));
+ out.push("",`1位：${types[ranking[0]].name}`,types[ranking[0]].feature,"",`2位：${types[ranking[1]].name}`,types[ranking[1]].feature,"","接客の糸口");
+ out.push(...["A","B","C","D","E"].map(k=>`${types[k].name}：${types[k].opening}`));
+ out.push("","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");return out.join("\n");}
+$("startBtn").addEventListener("click",()=>{current=0;renderQuestion();show("quiz");});
+$("prevBtn").addEventListener("click",()=>{if(current>0){current--;renderQuestion();}});
+$("nextBtn").addEventListener("click",()=>{if(!answers[current])return;if(current<questions.length-1){current++;renderQuestion();}else if(answers.every(Boolean)){renderResult();show("result");}else{const missing=answers.findIndex(a=>!a);current=missing;renderQuestion();}});
+$("restartBtn").addEventListener("click",()=>{answers=Array(questions.length).fill(null);current=0;$("copyStatus").textContent="";renderQuestion();show("start");});
+$("backToQuizBtn").addEventListener("click",()=>{current=0;while(current<answers.length-1&&answers[current])current++;renderQuestion();show("quiz");});
+$("copyBtn").addEventListener("click",async()=>{const txt=resultText();try{await navigator.clipboard.writeText(txt);$("copyStatus").textContent="診断結果をコピーしました。Zoomチャットなどに貼り付けられます。";}catch(e){const ta=document.createElement("textarea");ta.value=txt;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();const ok=document.execCommand("copy");ta.remove();$("copyStatus").textContent=ok?"診断結果をコピーしました。":"コピーできませんでした。ブラウザーの権限をご確認ください。";}});
+</script>
+</body>
+</html>
