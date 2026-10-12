@@ -122,8 +122,11 @@ h1,h2,h3,.combo-name,.advice-q,.say-label{text-wrap:balance}
 .hgrid{grid-template-columns:1fr;gap:6px}
 .hcell{display:grid;grid-template-columns:28px 1fr auto;grid-template-areas:"n nm mk" "n cm mk" "bar bar bar";column-gap:10px;row-gap:2px;align-items:center;min-height:0;padding:10px 12px}
 .hcell .hn{grid-area:n}.hcell .nm{grid-area:nm}.hcell .cm{grid-area:cm}.hcell .mk{grid-area:mk;margin:0;font-size:1.6rem}.hcell .hbar{grid-area:bar;margin-top:6px}}
-.legend{container-type:inline-size}
-.legend-desc{font-size:.7rem;font-size:max(10px,min(.84rem,calc((100cqw - 22px) / 31.5)))}
+#result{container-type:inline-size;--fs:.7rem}
+@supports (width:1cqw){#result{--fs:max(10px,min(.84rem,calc((100cqw - 22px) / 31.5)))}}
+.legend-desc,#result>p.muted,.hflow,.hlegend,.heat .note,.advice-note{font-size:var(--fs)}
+.combo-pair.stack{flex-direction:column;align-items:flex-start;gap:4px}
+.combo-pair.stack span.x{padding-left:1.6em;line-height:1}
 </style>
 </head>
 <body>
@@ -359,7 +362,7 @@ function getStyles(sc,g,total){
  return{main:[multi()],sub:P.map(p=>pair(...p))};
 }
 function makeCombo(o){const d=mk("div","combo"+(o.sm?" sm":""));d.style.setProperty("--c1",o.c1);d.style.setProperty("--c2",o.c2);
- const pair=mk("div","combo-pair");o.chips.forEach(c=>pair.append(c==="×"?mk("span","x","×"):mk("span","t",c)));
+ const pair=mk("div","combo-pair"+(o.chips.includes("×")?" stack":""));o.chips.forEach(c=>pair.append(c==="×"?mk("span","x","×"):mk("span","t",c)));
  const st=mk("div","combo-strength");st.append(mk("strong",null,"営業での強み"),document.createTextNode(o.strength));
  d.append(mk("div","combo-eyebrow","YOUR SALES STYLE"));if(o.badge)d.append(mk("span","combo-no",o.badge));
  d.append(mk("h2","combo-name",o.name),pair,mk("p","combo-desc",o.desc));if(o.note)d.append(mk("p","combo-note",o.note));d.append(st);return d;}
@@ -396,10 +399,12 @@ function heatInfo(sc,g,total){
   return{t,scene:SCENES[bi],weaks:mains.map(m=>({m,w:advices[m+t].weak}))};});
  return{rows,items,multi:mains.length>1};
 }
-function advHead(plan,sc,m,t){
+function advHeadLines(plan,sc,m,t){
  const mp=plan.balanced?"あなたが選んだ軸":(plan.mains.length>1?"同率1位の強み":"あなたの強み"),tp=plan.balanced?"ほかの視点":(sc[t]===0?"今回選ばれなかった":"割合が少なかった");
- return `${mp}【${types[m].name} ${plan.pct(m)}%】× ${tp}【${types[t].name} ${plan.pct(t)}%】で考えると…`;
+ return[mp,`【${types[m].name} ${plan.pct(m)}%】`,"×",tp,`【${types[t].name} ${plan.pct(t)}%】`,"で考えると…"];
 }
+function advHead(plan,sc,m,t){const l=advHeadLines(plan,sc,m,t);return `${l[0]}${l[1]} ${l[2]} ${l[3]}${l[4]}${l[5]}`;}
+const brLines=(tag,lines)=>{const h=mk(tag);lines.forEach((x,i)=>{if(i)h.appendChild(document.createElement("br"));h.appendChild(document.createTextNode(x));});return h;};
 function renderHeat(sc,g,total){
  const root=$("heat"),hi=heatInfo(sc,g,total);root.innerHTML="";root.className="heat";
  root.appendChild(mk("h3",null,"接客ヒートマップ"));root.appendChild(mk("p","hflow","接客の流れに沿って、1から5の順に並んでいます。"));
@@ -419,12 +424,12 @@ function renderAdvice(sc,g,total){
  const plan=getAdvicePlan(sc,g,total,axis),adv=$("advice");adv.innerHTML="";adv.className="advice lv"+plan.lv.lv;
  const head=mk("div","advice-head"),lvRow=mk("div","advice-level"),eb=mk("span","eyebrow","WIDEN YOUR RANGE");eb.style.color="#9b7b43";
  lvRow.append(eb,mk("span","stars",plan.lv.stars),mk("span","level-label",plan.lv.label));
- head.append(lvRow,mk("h2",null,`幅を広げる糸口：${plan.title}`),mk("p","advice-intro",plan.intro));if(plan.note)head.appendChild(mk("p","advice-note",plan.note));
+ head.append(lvRow,brLines("h2",["幅を広げる糸口：",plan.title]),mk("p","advice-intro",plan.intro));if(plan.note)head.appendChild(mk("p","advice-note",plan.note));
  const body=mk("div","advice-body");
  if(plan.balanced){const row=mk("div","axis-row");K.forEach(k=>{const b=mk("button","btn outline"+(axis===k?" on":""),`${elementInfo[k].label}を軸にする`);b.type="button";b.addEventListener("click",()=>{axis=k;renderAdvice(sc,g,total);});row.appendChild(b);});body.appendChild(row);}
  plan.mains.forEach(m=>plan.targets.forEach(t=>{
   const ad=advices[m+t],card=mk("div","adv-card");card.style.setProperty("--cc",types[t].color);
-  card.append(mk("h3",null,advHead(plan,sc,m,t)),mk("p","adv-lead",`${shorts[m]}を活かして、${shorts[t]}を足してみましょう。`));
+  card.append(brLines("h3",advHeadLines(plan,sc,m,t)),mk("p","adv-lead",`${shorts[m]}を活かして、${shorts[t]}を足してみましょう。`));
   if(plan.balanced){const pw=mk("p");pw.append(mk("span","adv-label","手薄になりやすい点"),document.createTextNode(ad.weak));card.appendChild(pw);}
   const p2=mk("p");p2.append(mk("span","adv-label","まずやってみたいこと"),document.createTextNode(ad.tip));
   card.append(p2,mk("div","say-label","例えばこんな一言"),mk("div","advice-q",`「${ad.say}」`));body.appendChild(card);}));
