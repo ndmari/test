@@ -98,6 +98,18 @@ h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
 .combo.sm{padding:18px 20px;margin:12px 0 0}.combo.sm:after{display:none}.combo.sm .combo-name{font-size:1.25rem;margin:8px 0}
 .more{margin-top:12px}.more summary{cursor:pointer;font-weight:700;color:var(--navy);padding:12px 4px}
 .axis-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}.axis-row .btn{flex:1;min-width:150px}.axis-row .btn.on{background:var(--navy);color:#fff}
+.heat{margin-top:22px;padding:20px 22px;background:#fff;border:1px solid var(--line);border-radius:16px}.heat h3{margin:0;font-size:1.05rem;color:var(--navy)}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin:14px 0 10px}
+.hcell{border:1px solid var(--line);border-radius:10px;padding:12px 10px;display:flex;flex-direction:column;gap:6px;min-height:140px;background:#f4f7f9}
+.hcell .nm{font-size:.82rem;font-weight:800;margin:0}.hcell .mk{font-size:1.5rem;font-weight:800;line-height:1;margin:2px 0;color:var(--muted)}.hcell .cm{font-size:.78rem;margin:0;line-height:1.5;color:var(--muted)}
+.hbar{height:4px;border-radius:2px;background:#dfe6ec;margin-top:auto}.hbar i{display:block;height:4px;border-radius:2px;background:#9aa8b5}
+.h4{background:#e6f4ee;border-color:#b7dcc8}.h4 .nm,.h4 .mk{color:#1f6b4a}.h4 .hbar i{background:#3a9a72}
+.h3{background:#f1f8f4;border-color:#d6eadf}.h3 .mk{color:#1f6b4a}.h3 .hbar i{background:#3a9a72}
+.h1{background:#fdf1e1;border-color:#f0cf9c}.h1 .nm,.h1 .mk{color:#8a5a12}.h1 .hbar i{background:#d9922b}
+.hlegend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;color:var(--muted)}
+.hbox{margin-top:12px;background:#f4f7f9;border:1px solid var(--line);border-radius:10px;padding:12px 14px}.hbox .hl{margin:0;font-size:.82rem;color:var(--muted);font-weight:700}.hbox p{margin:4px 0 0;font-size:.92rem;line-height:1.7}
+.hchip{display:inline-flex;gap:6px;align-items:center;padding:3px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.8rem;font-weight:700}.hchip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.adv-card h3{font-size:1rem;line-height:1.6;margin:0;color:var(--navy)}
 </style>
 </head>
 <body>
@@ -137,17 +149,17 @@ h3{font-size:1.1rem;margin:0 0 8px}.lead{font-size:1.04rem;max-width:650px}
     <div class="eyebrow" style="color:#9b7b43">Your Result</div>
     <h2>あなたの営業スタイル分析</h2>
     <p class="muted">回答した15問の選択傾向を集計しています。割合は営業能力の高さを示すものではありません。</p>
-    <div id="combo"></div>
     <div class="chart-section">
       <h3>5つの要素の割合</h3>
       <div class="result-top">
         <div class="chart-wrap">
           <div id="donut" class="donut" role="img" aria-label="5つの要素の回答割合を示す円グラフ"></div>
-          <div class="chart-center"><span class="muted" style="font-size:.8rem">回答数</span><strong>15</strong><span class="muted" style="font-size:.8rem">TOTAL</span></div>
         </div>
         <div id="legend" class="legend"></div>
       </div>
     </div>
+    <div id="combo"></div>
+    <div id="heat"></div>
     <div class="advice" id="advice"></div>
     <div class="result-actions">
       <button id="copyBtn" class="btn primary">結果をコピー</button>
@@ -220,7 +232,7 @@ const shorts={A:"観察して掘り下げる力",B:"場を和ませる力",C:"�
 const advices = {
  AB:{name:"心を開いてから聞く観察者",weak:"質問や観察はできていても、雑談や共感で距離を縮める場面が少なく、事情聴取のような印象になりがちです。",tip:"質問の前に、共感の一言か自己開示を1つ入れてみましょう。",say:"実は私も、初めて式場を見に行ったときは緊張しました。今日は気楽に話してくださいね"},
  AC:{name:"整理して道を示す観察者",weak:"話を深く聞けても、そこから次の一歩を示せず、情報が溜まったまま終わりがちです。",tip:"聞いた内容を3点に要約し、次に決めることを1つ添えてみましょう。",say:"大切にされたいのは『ゲストとの時間』と『予算内で叶えること』ですね。次は、ご招待する人数の目安を決めていきましょう"},
- AD:{name:"想像を広げる観察者",weak:"事実の確認が中心で、お客様が理想を思い描く時間を作れません。",tip:"聞いた希望を、当日の場面に置き換えて描写してみましょう。",say:"そのご希望が叶うと、当日はこんな場面になりそうですね"},
+ AD:{name:"想像を広げる観察者",weak:"事実の確認が中心で、お客様が理想を思い描く時間を作れていないかもしれません。",tip:"聞いた希望を、当日の場面に置き換えて描写してみましょう。",say:"そのご希望が叶うと、当日はこんな場面になりそうですね"},
  AE:{name:"先回りして確認する観察者",weak:"本音の深掘りに集中し、予算・人数・時期などの基本条件の確認が抜けることがあります。",tip:"面談の最後に、確認事項を一緒にチェックする時間を設けてみましょう。",say:"最後に、決めるうえで気になる条件を一緒に確認させてください"},
  BA:{name:"本音に一歩踏み込む場づくり役",weak:"場は和むものの、会話が表面的になり、本当の希望や不安まで届きにくいことがあります。",tip:"「なぜ」ではなく「きっかけ」を聞くと、詰問にならずに深掘りできます。",say:"そのイメージを大切にしたいと思われたのは、何かきっかけがあったのでしょうか？"},
  BC:{name:"盛り上がりを前進に変える場づくり役",weak:"会話は盛り上がっても、結論や次回までの宿題が曖昧なまま終わりがちです。",tip:"終盤に「今日決まったこと」と「次に決めること」を言葉にしましょう。",say:"今日決まったことと、次に決めることを整理してみましょう"},
@@ -232,7 +244,7 @@ const advices = {
  CE:{name:"注意点まで添える案内役",weak:"前に進めることを優先して、リスクや注意点の説明が薄くなりがちです。",tip:"提案するときに、事前に知っておきたい点を3つセットで伝えましょう。",say:"この案で、事前に知っておいていただきたい点が3つあります"},
  DA:{name:"価値観を聞いてから描く発想家",weak:"アイデアが先に出て、お客様の価値観や背景とずれることがあります。",tip:"アイデアを出す前に、普段大切にしていることを聞いてみましょう。",say:"普段のおふたりが大切にしていることを教えていただけますか？"},
  DB:{name:"反応を見ながら描く発想家",weak:"発想が先行し、お客様の気持ちが追いついているか確認し損ねることがあります。",tip:"アイデアを出すたびに、反応を聞く習慣をつけましょう。",say:"今のご提案で、ピンとくる部分とそうでない部分はどこですか？"},
- DC:{name:"絞り込んで決める発想家",weak:"案が広がるほど、お客様が選べずに迷ってしまいます。",tip:"アイデアを3つに絞り、優先順位をつけるところまで一緒に進めましょう。",say:"アイデアを3つに絞って、優先順位をつけてみましょう"},
+ DC:{name:"絞り込んで決める発想家",weak:"案が広がるほど、お客様が選べずに迷ってしまうかもしれません。",tip:"アイデアを3つに絞り、優先順位をつけるところまで一緒に進めましょう。",say:"アイデアを3つに絞って、優先順位をつけてみましょう"},
  DE:{name:"実現条件まで添える発想家",weak:"魅力は伝わっても、費用や準備期間の確認が後回しで、後から壁にぶつかりがちです。",tip:"アイデアには、費用と準備期間の目安をセットで添えましょう。",say:"この演出は、費用の目安が約20万円、準備は2か月ほど前から始めると安心です"},
  EA:{name:"理由まで掘り下げる確認役",weak:"確認は丁寧でも手続き的で、お客様がその点を気にする理由まで届きにくいです。",tip:"確認のあとに、背景を尋ねる一言を添えてみましょう。",say:"その点を気にされているのは、何か背景があるのでしょうか？"},
  EB:{name:"温度を伝える確認役",weak:"正確な説明が続くと、事務的で距離のある印象になることがあります。",tip:"説明の冒頭と結びに、気持ちの伝わる一言を入れましょう。",say:"気になる点があれば、いつでもお声がけくださいね"},
@@ -358,6 +370,37 @@ function renderDonut(sc,total,ranking){
    svg.append(t1,t2);});});
  $("donut").replaceChildren(svg);
 }
+const SCENES=["初回ヒアリング","会場見学","進行内容提案","見積・予算","クロージング"];
+const SW={A:[3,2,1,2,1],B:[3,3,1,1,2],C:[1,1,3,2,3],D:[1,3,3,1,1],E:[1,1,2,3,3]};
+const LV=[{min:2.2,mk:"◎",c:"h4",cm:"強みが活きる場面"},{min:1.95,mk:"○",c:"h3",cm:"力を発揮しやすい場面"},{min:1.65,mk:"△",c:"h2",cm:"標準的に進められる場面"},{min:0,mk:"▲",c:"h1",cm:"伸びしろのある場面"}];
+// 接客ヒートマップ：場面ごとに Σ(要素の割合×その場面での効き) を算出
+function heatInfo(sc,g,total){
+ const vals=SCENES.map((_,i)=>K.reduce((a,k)=>a+(total?sc[k]/total:0)*SW[k][i],0));
+ const rows=SCENES.map((n,i)=>{const l=LV.find(l=>vals[i]>=l.min);return{n,mk:l.mk,c:l.c,cm:l.cm,w:Math.round(vals[i]/3*100)};});
+ if(g.length===1)return{rows,items:[],multi:false};
+ const mains=g[0],items=g[g.length-1].map(t=>{let bi=-1;SCENES.forEach((n,i)=>{if(SW[t][i]===3&&(bi<0||vals[i]<vals[bi]))bi=i;});
+  return{t,scene:SCENES[bi],weaks:mains.map(m=>({m,w:advices[m+t].weak}))};});
+ return{rows,items,multi:mains.length>1};
+}
+function advHead(plan,sc,m,t){
+ const mp=plan.balanced?"あなたが選んだ軸":(plan.mains.length>1?"同率1位の強み":"あなたの強み"),tp=plan.balanced?"ほかの視点":(sc[t]===0?"今回選ばれなかった":"割合が少なかった");
+ return `${mp}【${types[m].name} ${plan.pct(m)}%】× ${tp}【${types[t].name} ${plan.pct(t)}%】で考えると…`;
+}
+function renderHeat(sc,g,total){
+ const root=$("heat"),hi=heatInfo(sc,g,total);root.innerHTML="";root.className="heat";
+ root.appendChild(mk("h3",null,"接客ヒートマップ"));
+ const grid=mk("div","hgrid");hi.rows.forEach(r=>{const c=mk("div","hcell "+r.c),bar=mk("div","hbar"),i=mk("i");i.style.width=r.w+"%";bar.appendChild(i);c.append(mk("p","nm",r.n),mk("p","mk",r.mk),mk("p","cm",r.cm),bar);grid.appendChild(c);});
+ root.appendChild(grid);
+ root.appendChild(mk("div","hlegend")).append(mk("span",null,"◎ とても得意"),mk("span",null,"○ 得意"),mk("span",null,"△ ふつう"),mk("span",null,"▲ 伸びしろあり"));
+ if(g.length===1){const b=mk("div","hbox");b.append(mk("p","hl","バランス型"),mk("p",null,"5つの要素が同率のため、場面による差は小さい傾向です。"));root.appendChild(b);}
+ hi.items.forEach(it=>{
+  const w=mk("div","hbox");w.appendChild(mk("p","hl","手薄になりやすい点"));
+  it.weaks.forEach(x=>w.appendChild(mk("p",null,(hi.multi?`${elementInfo[x.m].label}×${elementInfo[it.t].label}：`:"")+x.w)));root.appendChild(w);
+  const y=mk("div","hbox"),chip=mk("span","hchip"),dot=mk("i");dot.style.background=types[it.t].color;chip.append(dot,document.createTextNode(`${types[it.t].name}（${shorts[it.t]}）`));
+  const row=mk("p");row.append(document.createTextNode("見直したい要素　"),chip);
+  y.append(mk("p","hl","伸ばしどころ"),mk("p",null,it.scene),row,mk("p",null,`この場面は${shorts[it.t]}が効きますが、今回はあまり選ばれませんでした。${shorts[it.t]}を1つ意識して足してみましょう。具体的な進め方は、下の「幅を広げる糸口」で確認できます。`));root.appendChild(y);});
+ root.appendChild(mk("p","note","傾向を示すもので、営業力の優劣ではありません。"));
+}
 function renderAdvice(sc,g,total){
  const plan=getAdvicePlan(sc,g,total,axis),adv=$("advice");adv.innerHTML="";adv.className="advice lv"+plan.lv.lv;
  const head=mk("div","advice-head"),lvRow=mk("div","advice-level"),eb=mk("span","eyebrow","WIDEN YOUR RANGE");eb.style.color="#9b7b43";
@@ -367,10 +410,10 @@ function renderAdvice(sc,g,total){
  if(plan.balanced){const row=mk("div","axis-row");K.forEach(k=>{const b=mk("button","btn outline"+(axis===k?" on":""),`${elementInfo[k].label}を軸にする`);b.type="button";b.addEventListener("click",()=>{axis=k;renderAdvice(sc,g,total);});row.appendChild(b);});body.appendChild(row);}
  plan.mains.forEach(m=>plan.targets.forEach(t=>{
   const ad=advices[m+t],card=mk("div","adv-card");card.style.setProperty("--cc",types[t].color);
-  const top2=mk("div","adv-top");top2.append(mk("span",null,`${types[m].name.replace("要素","")} × ${types[t].name.replace("要素","")}`),mk("span",null,`${types[t].name} ${plan.pct(t)}%`));
-  const p1=mk("p");p1.append(mk("span","adv-label","手薄になりやすい点"),document.createTextNode(ad.weak));
-  const p2=mk("p");p2.append(mk("span","adv-label","まずやってみること"),document.createTextNode(ad.tip));
-  card.append(top2,mk("p","adv-lead",`${types[m].name}の強みを活かして、${types[t].name}を足すと…`),mk("h3",null,ad.name),p1,p2,mk("div","say-label","例えばこんな一言"),mk("div","advice-q",`「${ad.say}」`));body.appendChild(card);}));
+  card.append(mk("h3",null,advHead(plan,sc,m,t)),mk("p","adv-lead",`${shorts[m]}を活かして、${shorts[t]}を足してみましょう。`));
+  if(plan.balanced){const pw=mk("p");pw.append(mk("span","adv-label","手薄になりやすい点"),document.createTextNode(ad.weak));card.appendChild(pw);}
+  const p2=mk("p");p2.append(mk("span","adv-label","まずやってみたいこと"),document.createTextNode(ad.tip));
+  card.append(p2,mk("div","say-label","例えばこんな一言"),mk("div","advice-q",`「${ad.say}」`));body.appendChild(card);}));
  adv.append(head,body);
 }
 function renderResult(){
@@ -384,16 +427,20 @@ function renderResult(){
  const st=getStyles(sc,g,total),root=$("combo");root.innerHTML="";
  st.main.forEach(c=>root.appendChild(makeCombo(c)));
  if(st.sub.length){const d=mk("details","more");d.append(mk("summary",null,`個別の組み合わせを見る（${st.sub.length}件）`),...st.sub.map(c=>makeCombo({...c,sm:true})));root.appendChild(d);}
+ renderHeat(sc,g,total);
  renderAdvice(sc,g,total);
 }
-function resultText(){const sc=getScores(),total=answers.filter(Boolean).length,g=groups(sc),p=k=>total?(sc[k]/total*100).toFixed(1):"0.0",st=getStyles(sc,g,total),plan=getAdvicePlan(sc,g,total,axis);
+function resultText(){const sc=getScores(),total=answers.filter(Boolean).length,g=groups(sc),p=k=>total?(sc[k]/total*100).toFixed(1):"0.0",st=getStyles(sc,g,total),plan=getAdvicePlan(sc,g,total,axis),hi=heatInfo(sc,g,total);
  const ln=c=>[`【${c.name}】`,`（${c.chips.filter(x=>x!=="×").join(c.chips.includes("×")?" × ":"、")}）`,c.desc,`営業での強み：${c.strength}`];
- const out=["営業スタイル診断結果","回答数："+total+"問","","■ あなたの営業スタイル"];
+ const out=["営業スタイル診断結果","","■ あなたの営業スタイル"];
  st.main.forEach(c=>out.push(...ln(c),""));
  if(st.sub.length){out.push("■ 個別の組み合わせ");st.sub.forEach(c=>out.push(...ln(c),""));}
  out.push("■ 5つの要素の割合");K.forEach(k=>out.push(`${types[k].name}：${p(k)}%`));
+ out.push("","■ 接客ヒートマップ",...hi.rows.map(r=>`${r.n}：${r.mk}`));
+ if(!hi.items.length)out.push("5つの要素が同率のため、場面による差は小さい傾向です。");
+ hi.items.forEach(it=>{out.push("","【手薄になりやすい点】",...it.weaks.map(x=>(hi.multi?`${elementInfo[x.m].label}×${elementInfo[it.t].label}：`:"")+x.w),`【伸ばしどころ】${it.scene}／見直したい要素：${types[it.t].name}（${shorts[it.t]}）`);});
  out.push("",`■ 幅を広げる糸口 ${plan.lv.stars} ${plan.lv.label}`,plan.title,plan.intro,...(plan.note?[plan.note]:[]));
- plan.mains.forEach(m=>plan.targets.forEach(t=>{const ad=advices[m+t];out.push("",`【${ad.name}】${types[m].name} × ${types[t].name}（${p(t)}%）`,`${types[m].name}の強みを活かして、${types[t].name}を足すと…`,`手薄になりやすい点：${ad.weak}`,`まずやってみること：${ad.tip}`,`例えばこんな一言：${ad.say}`);}));
+ plan.mains.forEach(m=>plan.targets.forEach(t=>{const ad=advices[m+t];out.push("",advHead(plan,sc,m,t),`${shorts[m]}を活かして、${shorts[t]}を足してみましょう。`,...(plan.balanced?[`手薄になりやすい点：${ad.weak}`]:[]),`まずやってみたいこと：${ad.tip}`,`例えばこんな一言：${ad.say}`);}));
  out.push("","※研修用の自己理解ツールです。営業能力の優劣を判定するものではありません。");return out.join("\n");}
 $("startBtn").addEventListener("click",()=>{newOrders();current=0;renderQuestion();show("quiz");});
 $("prevBtn").addEventListener("click",()=>{if(current>0){current--;renderQuestion();}});
